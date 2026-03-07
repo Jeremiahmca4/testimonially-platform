@@ -46,6 +46,22 @@ function drawRoundRect(ctx, x, y, w, h, r) {
   ctx.closePath();
 }
 
+function drawBackground(ctx, SIZE, bgImg, tintColor, tintAlpha) {
+  if (!bgImg) return;
+  // Draw image cover-fit
+  const scale = Math.max(SIZE / bgImg.width, SIZE / bgImg.height);
+  const w = bgImg.width * scale;
+  const h = bgImg.height * scale;
+  const x = (SIZE - w) / 2;
+  const y = (SIZE - h) / 2;
+  ctx.drawImage(bgImg, x, y, w, h);
+  // Apply tint overlay
+  ctx.fillStyle = tintColor;
+  ctx.globalAlpha = tintAlpha;
+  ctx.fillRect(0, 0, SIZE, SIZE);
+  ctx.globalAlpha = 1;
+}
+
 function drawLogo(ctx, logoImg, x, y, size) {
   if (!logoImg) return;
   // Draw circular clipped logo
@@ -98,11 +114,12 @@ function drawFooter(ctx, SIZE, PAD, name, biz, source, logoImg, textColor, subCo
 const TEMPLATES = [
   {
     id: 'obsidian', label: 'Obsidian', preview: ['#141210','#1e1a17'],
-    render(ctx, SIZE, d, logo) {
+    render(ctx, SIZE, d, logo, bgImg) {
       const PAD = 60;
       const bg = ctx.createLinearGradient(0,0,SIZE,SIZE);
       bg.addColorStop(0,'#141210'); bg.addColorStop(1,'#1e1a17');
       ctx.fillStyle = bg; ctx.fillRect(0,0,SIZE,SIZE);
+      drawBackground(ctx, SIZE, bgImg, '#141210', 0.72);
       const glow = ctx.createRadialGradient(SIZE*.85,SIZE*.15,0,SIZE*.85,SIZE*.15,380);
       glow.addColorStop(0,'rgba(245,158,11,0.12)'); glow.addColorStop(1,'transparent');
       ctx.fillStyle = glow; ctx.fillRect(0,0,SIZE,SIZE);
@@ -119,9 +136,10 @@ const TEMPLATES = [
   },
   {
     id: 'white', label: 'Clean White', preview: ['#ffffff','#f8f7f5'],
-    render(ctx, SIZE, d, logo) {
+    render(ctx, SIZE, d, logo, bgImg) {
       const PAD = 60;
       ctx.fillStyle = '#ffffff'; ctx.fillRect(0,0,SIZE,SIZE);
+      drawBackground(ctx, SIZE, bgImg, '#ffffff', 0.78);
       ctx.fillStyle = '#b8922a'; ctx.fillRect(PAD, 50, 52, 5);
       drawStars(ctx, d.rating, PAD, PAD+74, 30, '#f59e0b');
       ctx.font = 'bold 110px Georgia,serif'; ctx.fillStyle = 'rgba(184,146,42,0.1)';
@@ -136,11 +154,12 @@ const TEMPLATES = [
   },
   {
     id: 'ember', label: 'Ember', preview: ['#7c2d12','#b45309'],
-    render(ctx, SIZE, d, logo) {
+    render(ctx, SIZE, d, logo, bgImg) {
       const PAD = 60;
       const bg = ctx.createLinearGradient(0,SIZE,SIZE,0);
       bg.addColorStop(0,'#7c2d12'); bg.addColorStop(1,'#b45309');
       ctx.fillStyle = bg; ctx.fillRect(0,0,SIZE,SIZE);
+      drawBackground(ctx, SIZE, bgImg, '#7c2d12', 0.72);
       drawStars(ctx, d.rating, PAD, PAD+40, 30, '#fde68a');
       ctx.font = 'bold 150px Georgia,serif'; ctx.fillStyle = 'rgba(255,255,255,0.1)';
       ctx.fillText('\u201C', PAD-8, PAD+155);
@@ -154,11 +173,12 @@ const TEMPLATES = [
   },
   {
     id: 'slate', label: 'Slate', preview: ['#1e293b','#334155'],
-    render(ctx, SIZE, d, logo) {
+    render(ctx, SIZE, d, logo, bgImg) {
       const PAD = 60;
       const bg = ctx.createLinearGradient(0,0,SIZE,SIZE);
       bg.addColorStop(0,'#1e293b'); bg.addColorStop(1,'#334155');
       ctx.fillStyle = bg; ctx.fillRect(0,0,SIZE,SIZE);
+      drawBackground(ctx, SIZE, bgImg, '#1e293b', 0.75);
       ctx.fillStyle = '#14b8a6'; ctx.fillRect(PAD, 50, 56, 4);
       drawStars(ctx, d.rating, PAD, PAD+74, 30, '#f59e0b');
       ctx.font = 'bold 140px Georgia,serif'; ctx.fillStyle = 'rgba(20,184,166,0.15)';
@@ -173,9 +193,10 @@ const TEMPLATES = [
   },
   {
     id: 'bold', label: 'Bold Type', preview: ['#f9fafb','#f3f4f6'],
-    render(ctx, SIZE, d, logo) {
+    render(ctx, SIZE, d, logo, bgImg) {
       const PAD = 60;
       ctx.fillStyle = '#f9fafb'; ctx.fillRect(0,0,SIZE,SIZE);
+      drawBackground(ctx, SIZE, bgImg, '#f9fafb', 0.80);
       ctx.fillStyle = '#111827'; ctx.fillRect(0,0,10,SIZE);
       ctx.font = 'bold 260px Georgia,serif'; ctx.fillStyle = '#111827';
       ctx.textAlign = 'right';
@@ -192,11 +213,12 @@ const TEMPLATES = [
   },
   {
     id: 'forest', label: 'Forest', preview: ['#14532d','#166534'],
-    render(ctx, SIZE, d, logo) {
+    render(ctx, SIZE, d, logo, bgImg) {
       const PAD = 60;
       const bg = ctx.createLinearGradient(0,0,SIZE,SIZE);
       bg.addColorStop(0,'#14532d'); bg.addColorStop(1,'#166534');
       ctx.fillStyle = bg; ctx.fillRect(0,0,SIZE,SIZE);
+      drawBackground(ctx, SIZE, bgImg, '#14532d', 0.72);
       drawStars(ctx, d.rating, PAD, PAD+40, 30, '#bbf7d0');
       ctx.font = 'bold 150px Georgia,serif'; ctx.fillStyle = 'rgba(134,239,172,0.12)';
       ctx.fillText('\u201C', PAD-8, PAD+155);
@@ -210,9 +232,10 @@ const TEMPLATES = [
   },
   {
     id: 'luxury', label: 'Luxury', preview: ['#1a1400','#2d2200'],
-    render(ctx, SIZE, d, logo) {
+    render(ctx, SIZE, d, logo, bgImg) {
       const PAD = 60;
       ctx.fillStyle = '#1a1400'; ctx.fillRect(0,0,SIZE,SIZE);
+      drawBackground(ctx, SIZE, bgImg, '#1a1400', 0.70);
       // Gold border frame
       ctx.strokeStyle = '#c9a84c'; ctx.lineWidth = 2;
       ctx.strokeRect(24, 24, SIZE-48, SIZE-48);
@@ -237,11 +260,12 @@ const TEMPLATES = [
   },
   {
     id: 'rose', label: 'Rose', preview: ['#881337','#be185d'],
-    render(ctx, SIZE, d, logo) {
+    render(ctx, SIZE, d, logo, bgImg) {
       const PAD = 60;
       const bg = ctx.createLinearGradient(0,0,SIZE,SIZE);
       bg.addColorStop(0,'#881337'); bg.addColorStop(1,'#be185d');
       ctx.fillStyle = bg; ctx.fillRect(0,0,SIZE,SIZE);
+      drawBackground(ctx, SIZE, bgImg, '#881337', 0.72);
       const glow = ctx.createRadialGradient(SIZE*.1,SIZE*.9,0,SIZE*.1,SIZE*.9,500);
       glow.addColorStop(0,'rgba(251,207,232,0.12)'); glow.addColorStop(1,'transparent');
       ctx.fillStyle = glow; ctx.fillRect(0,0,SIZE,SIZE);
@@ -258,9 +282,10 @@ const TEMPLATES = [
   },
   {
     id: 'navy', label: 'Navy Pro', preview: ['#0f172a','#1e3a5f'],
-    render(ctx, SIZE, d, logo) {
+    render(ctx, SIZE, d, logo, bgImg) {
       const PAD = 60;
       ctx.fillStyle = '#0f172a'; ctx.fillRect(0,0,SIZE,SIZE);
+      drawBackground(ctx, SIZE, bgImg, '#0f172a', 0.75);
       // Side accent
       const accent = ctx.createLinearGradient(0,0,0,SIZE);
       accent.addColorStop(0,'#3b82f6'); accent.addColorStop(1,'#1d4ed8');
@@ -278,11 +303,12 @@ const TEMPLATES = [
   },
   {
     id: 'purple', label: 'Midnight Purple', preview: ['#1e1b4b','#4c1d95'],
-    render(ctx, SIZE, d, logo) {
+    render(ctx, SIZE, d, logo, bgImg) {
       const PAD = 60;
       const bg = ctx.createLinearGradient(0,0,SIZE,SIZE);
       bg.addColorStop(0,'#1e1b4b'); bg.addColorStop(1,'#4c1d95');
       ctx.fillStyle = bg; ctx.fillRect(0,0,SIZE,SIZE);
+      drawBackground(ctx, SIZE, bgImg, '#1e1b4b', 0.72);
       const glow = ctx.createRadialGradient(SIZE*.8,SIZE*.2,0,SIZE*.8,SIZE*.2,420);
       glow.addColorStop(0,'rgba(167,139,250,0.15)'); glow.addColorStop(1,'transparent');
       ctx.fillStyle = glow; ctx.fillRect(0,0,SIZE,SIZE);
@@ -299,9 +325,10 @@ const TEMPLATES = [
   },
   {
     id: 'newspaper', label: 'Newspaper', preview: ['#fafaf9','#e7e5e4'],
-    render(ctx, SIZE, d, logo) {
+    render(ctx, SIZE, d, logo, bgImg) {
       const PAD = 60;
       ctx.fillStyle = '#fafaf9'; ctx.fillRect(0,0,SIZE,SIZE);
+      drawBackground(ctx, SIZE, bgImg, '#fafaf9', 0.82);
       // Top thick bar
       ctx.fillStyle = '#1c1917'; ctx.fillRect(0, 0, SIZE, 14);
       // Second thin bar
@@ -320,9 +347,10 @@ const TEMPLATES = [
   },
   {
     id: 'neon', label: 'Neon Dark', preview: ['#020617','#0f172a'],
-    render(ctx, SIZE, d, logo) {
+    render(ctx, SIZE, d, logo, bgImg) {
       const PAD = 60;
       ctx.fillStyle = '#020617'; ctx.fillRect(0,0,SIZE,SIZE);
+      drawBackground(ctx, SIZE, bgImg, '#020617', 0.75);
       // Neon glow blobs
       const g1 = ctx.createRadialGradient(120,120,0,120,120,300);
       g1.addColorStop(0,'rgba(34,211,238,0.08)'); g1.addColorStop(1,'transparent');
@@ -357,6 +385,9 @@ export default function TestimonialGenerator({ testimonial, restaurant, onClose 
   const [editText,  setEditText]  = useState(() => truncateToSentences(testimonial.review_text, 450));
   const [logoImg,   setLogoImg]   = useState(null);
   const [logoName,  setLogoName]  = useState('');
+  const [bgImg,     setBgImg]     = useState(null);
+  const [bgName,    setBgName]    = useState('');
+  const bgInputRef  = useRef(null);
 
   const render = useCallback(() => {
     const canvas = canvasRef.current;
@@ -371,8 +402,8 @@ export default function TestimonialGenerator({ testimonial, restaurant, onClose 
       biz:    restaurant?.name || '',
       rating: testimonial.rating || 5,
       source: testimonial.source === 'yelp' ? 'Yelp' : testimonial.source === 'facebook' ? 'Facebook' : 'Google',
-    }, logoImg);
-  }, [template, editText, testimonial, restaurant, logoImg]);
+    }, logoImg, bgImg);
+  }, [template, editText, testimonial, restaurant, logoImg, bgImg]);
 
   useEffect(() => { render(); }, [render]);
 
@@ -384,6 +415,19 @@ export default function TestimonialGenerator({ testimonial, restaurant, onClose 
     reader.onload = (ev) => {
       const img = new Image();
       img.onload = () => setLogoImg(img);
+      img.src = ev.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function handleBgUpload(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setBgName(file.name);
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const img = new Image();
+      img.onload = () => setBgImg(img);
       img.src = ev.target.result;
     };
     reader.readAsDataURL(file);
@@ -473,6 +517,30 @@ export default function TestimonialGenerator({ testimonial, restaurant, onClose 
                   )}
                 </div>
                 <input ref={logoInputRef} type="file" accept="image/*" className="hidden" onChange={handleLogoUpload} />
+              </div>
+
+              {/* Background image upload */}
+              <div>
+                <p className="field-label mb-1.5">Background photo</p>
+                <p className="text-xs mb-2" style={{ color: 'var(--ink-muted)' }}>Upload a food or interior photo — it blends with the template tint</p>
+                <div className="flex items-center gap-3">
+                  <button onClick={() => bgInputRef.current?.click()}
+                    className="btn-secondary text-sm px-4 py-2 flex-shrink-0">
+                    {bgImg ? '↺ Change photo' : '↑ Upload photo'}
+                  </button>
+                  {bgImg ? (
+                    <div className="flex items-center gap-2 min-w-0">
+                      <div className="w-8 h-8 rounded-lg overflow-hidden flex-shrink-0" style={{ border: '1px solid var(--border)' }}>
+                        <img src={bgInputRef.current?.files?.[0] ? URL.createObjectURL(bgInputRef.current.files[0]) : ''} 
+                          alt="" className="w-full h-full object-cover" />
+                      </div>
+                      <span className="text-xs truncate" style={{ color: 'var(--ink-muted)' }}>{bgName}</span>
+                      <button onClick={() => { setBgImg(null); setBgName(''); }}
+                        className="text-xs flex-shrink-0" style={{ color: '#ef4444' }}>✕</button>
+                    </div>
+                  ) : null}
+                </div>
+                <input ref={bgInputRef} type="file" accept="image/*" className="hidden" onChange={handleBgUpload} />
               </div>
 
               {/* Text editor */}
