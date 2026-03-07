@@ -1,0 +1,16 @@
+{
+  "name": "testimonially-scraper",
+  "version": "1.0.0",
+  "description": "Standalone Google Maps review scraper for Testimonially",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "scrape": "node src/index.js",
+    "dev":    "node --watch src/index.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.43.1",
+    "dotenv":                "^16.4.5",
+    "playwright":            "^1.44.0"
+  }
+}
