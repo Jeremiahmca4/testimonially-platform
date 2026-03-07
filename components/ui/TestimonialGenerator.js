@@ -4,7 +4,7 @@ import { useRef, useEffect, useState, useCallback } from 'react';
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
-function truncateToSentences(text, maxChars = 280) {
+function truncateToSentences(text, maxChars = 450) {
   if (text.length <= maxChars) return text;
   const sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
   let result = '';
@@ -354,7 +354,7 @@ export default function TestimonialGenerator({ testimonial, restaurant, onClose 
   const canvasRef   = useRef(null);
   const logoInputRef = useRef(null);
   const [template,  setTemplate]  = useState('obsidian');
-  const [editText,  setEditText]  = useState(() => truncateToSentences(testimonial.review_text, 280));
+  const [editText,  setEditText]  = useState(() => truncateToSentences(testimonial.review_text, 450));
   const [logoImg,   setLogoImg]   = useState(null);
   const [logoName,  setLogoName]  = useState('');
 
@@ -479,8 +479,8 @@ export default function TestimonialGenerator({ testimonial, restaurant, onClose 
               <div className="flex-1">
                 <div className="flex items-center justify-between mb-1.5">
                   <p className="field-label">Review text</p>
-                  <span className="text-xs" style={{ color: editText.length > 300 ? '#ef4444' : 'var(--ink-muted)' }}>
-                    {editText.length} / 300
+                  <span className="text-xs" style={{ color: editText.length > 450 ? '#ef4444' : 'var(--ink-muted)' }}>
+                    {editText.length} / 450
                   </span>
                 </div>
                 <textarea className="field-input resize-none" rows={6}
@@ -488,12 +488,12 @@ export default function TestimonialGenerator({ testimonial, restaurant, onClose 
                   style={{ fontFamily: 'Georgia, serif', fontSize: '14px', lineHeight: '1.6' }}
                   placeholder="Trim the review to the best 2–3 sentences…" />
                 <div className="flex gap-2 mt-2">
-                  <button onClick={() => setEditText(truncateToSentences(testimonial.review_text, 280))}
+                  <button onClick={() => setEditText(truncateToSentences(testimonial.review_text, 450))}
                     className="text-xs px-3 py-1.5 rounded-lg"
                     style={{ background: 'var(--surface-alt)', color: 'var(--ink-muted)', border: '1px solid var(--border)' }}>
                     ↺ Reset
                   </button>
-                  <button onClick={() => setEditText(truncateToSentences(editText, 160))}
+                  <button onClick={() => setEditText(truncateToSentences(editText, 220))}
                     className="text-xs px-3 py-1.5 rounded-lg"
                     style={{ background: 'var(--surface-alt)', color: 'var(--ink-muted)', border: '1px solid var(--border)' }}>
                     ✂ Trim shorter
